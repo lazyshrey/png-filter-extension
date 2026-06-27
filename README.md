@@ -69,30 +69,6 @@ To load and test this extension on your machine:
 
 ---
 
-## 📦 Chrome Web Store Publishing Guide
-
-To publish this extension to the Chrome Web Store, package the project files and submit them to the developer console:
-
-### Step 1: Create the ZIP Archive
-Select the following files and compress them into a `.zip` archive (e.g., `png-filter.zip`):
-- `manifest.json`
-- `background.js`
-- `content.js`
-- `content.css`
-- `icons/`
-- `assets/`
-
-### Step 2: Upload to Developer Console
-1. Go to the [Chrome Web Store Developer Console](https://chrome.google.com/webstore/devconsole).
-2. Sign in with a verified developer account.
-3. Click **New Item** and upload your ZIP file.
-
-### Step 3: Complete Disclosures (Crucial for Rapid Approval)
-* **Single-Purpose Statement:** `"The sole purpose of this extension is to analyze PNG images in Google Image Search results and visually label their transparency status."`
-* **Permission Justification for `<all_urls>`:** `"The extension requires host permission to fetch original PNG image source files from various web domains. The background worker fetches the image blob to inspect its alpha channel pixels on an Offscreen Canvas, verifying whether the image has true transparency or a fake solid background. Since Google Images links to files hosted across the entire web, the extension needs to be able to fetch from any external URL."`
-
----
-
 ## 🔒 Privacy & Safety
 
 - **Local Execution:** All calculations run locally in your browser context using `OffscreenCanvas`.
