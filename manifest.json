@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Transparent PNG Checker",
+  "version": "1.0.0",
+  "description": "Instantly verify if PNG images in Google Image Search results have real transparent backgrounds or fake checkerboard patterns.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.google.com/search*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
