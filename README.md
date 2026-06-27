@@ -1,91 +1,106 @@
-# Transparent PNG Checker - Chrome Extension
+<div align="center">
+  <br />
+  <img src="icons/icon128.png" alt="PNG-Filter Logo" width="128" />
+  <br />
+  <h1>🔍 PNG-FILTER</h1>
+  <p><strong>Verifying Authenticity in Real-Time</strong></p>
+  <p><i>A Premium, High-Performance Chrome Extension to Detect and Flag Fake PNGs Instantly in the Google Search Grid.</i></p>
 
-A lightweight, high-performance Manifest V3 Google Chrome extension that automatically scans Google Image search results in real-time, verifying if images claiming to be PNGs have actual transparent backgrounds or if they are "fake PNGs" with solid backgrounds (such as baked-in gray and white checkerboard patterns).
+  <br />
 
-It places a premium, floating badge directly on the thumbnails in the search results grid:
-*   **Real PNG** (Green Badge): Real alpha transparency (transparent pixels exist).
-*   **Fake PNG** (Red Badge): Solid background (ends in `.png` but has no transparent pixels).
+  <div align="center">
+    <a href="https://developer.chrome.com/docs/extensions/mv3/"><img src="https://img.shields.io/badge/Manifest-V3-111111?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Manifest V3" /></a>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img src="https://img.shields.io/badge/JavaScript-ES6+-yellow?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" /></a>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML"><img src="https://img.shields.io/badge/HTML5-CSS3-orange?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5/CSS3" /></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" /></a>
+    <a href="https://discord.com/invite/ZVCB8EnRX2"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+  </div>
+
+  <br />
+  <div align="center">
+    <img src="assets/preview.png" alt="PNG-Filter Preview" width="550" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);" />
+  </div>
+  <br />
+</div>
 
 ---
 
-## 🛠️ Local Development Setup
+## 📽️ The PNG-Filter Vision
+
+**PNG-Filter** solves a frustrating, daily digital workflow bottleneck for designers, developers, and creators. We've all searched for a transparent PNG asset, only to download a file with a fake, baked-in gray and white checkerboard background. This extension integrates seamlessly into Google Image Search to verify transparency under the hood and overlay visual verification labels before you ever click or download a result.
+
+<div align="center">
+  <table border="0" cellspacing="0" cellpadding="20">
+    <tr>
+      <td width="300" valign="top" style="border: 1px solid #333; border-radius: 15px; background: rgba(255,255,255,0.02); padding: 15px;">
+        <h3>⚡ Instant Scan</h3>
+        <p>Automatically scans the Google Images results grid in one go as the page loads and content appears. No hovering required.</p>
+      </td>
+      <td width="300" valign="top" style="border: 1px solid #333; border-radius: 15px; background: rgba(255,255,255,0.02); padding: 15px;">
+        <h3>🏷️ Smart Badges</h3>
+        <p>Dynamic indicator pills (<code>Real PNG</code> / <code>Fake PNG</code>) float directly on thumbnails with blur effects.</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="300" valign="top" style="border: 1px solid #333; border-radius: 15px; background: rgba(255,255,255,0.02); padding: 15px;">
+        <h3>⏳ Concurrency Queue</h3>
+        <p>Restricts background operations to 4 parallel image scans to preserve system RAM and prevent network spikes.</p>
+      </td>
+      <td width="300" valign="top" style="border: 1px solid #333; border-radius: 15px; background: rgba(255,255,255,0.02); padding: 15px;">
+        <h3>💾 Memory Caching</h3>
+        <p>An in-memory LRU cache stores up to 500 validated URLs so you never fetch the same image twice.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
+## 🚀 Local Installation
 
 To load and test this extension on your machine:
 
-1.  **Download / Clone** this repository to a folder on your computer.
-2.  Open Google Chrome and navigate to: `chrome://extensions`
-3.  In the top-right corner of the Extensions page, toggle the **"Developer mode"** switch to **ON**.
-4.  Click the **"Load unpacked"** button in the top-left corner.
-5.  Select the folder containing this project (the directory containing `manifest.json`).
-6.  The extension is now loaded! Go to [Google Images](https://images.google.com) and search for `transparent png` to see it in action.
-
-*Note: There is no build step or package installation required. The extension uses pure, native web technologies (HTML, CSS, JS).*
+1. Clone or download this repository.
+2. Open Google Chrome and navigate to `chrome://extensions`.
+3. In the top-right corner, toggle the **Developer mode** switch to **ON**.
+4. Click the **Load unpacked** button in the top-left corner.
+5. Select the folder containing these files (`C:\Codes\projects\png-filter`).
+6. Open [Google Images](https://images.google.com) and search for a transparent image (e.g. `cat transparent png`) to see it in action!
 
 ---
 
-## 🏗️ Architecture & Optimization Details
+## 📦 Chrome Web Store Publishing Guide
 
-The extension is designed to run with a minimal RAM footprint and high speed:
+To publish this extension to the Chrome Web Store, package the project files and submit them to the developer console:
 
-*   **`manifest.json`:** Declares the Manifest V3 settings.
-*   **`content.js`:** Monitors the Google Image Search grid, extracts original high-res image source URLs, and orchestrates validation.
-    *   *Optimization:* Uses a **concurrency-controlled queue** (limit of 4 simultaneous checks) to prevent network congestion or CPU spikes.
-    *   *Optimization:* Limits scanning to items matching the `.png` extension format to avoid scanning JPGs or WebPs.
-*   **`background.js` (Service Worker):** Bypasses CORS using host permissions to fetch images, downscales large images using `OffscreenCanvas` to save RAM, scans the alpha channel, and caches results.
-    *   *Optimization:* Downscales images to a maximum of 200x200 pixels prior to scanning to reduce pixel processing and memory overhead by up to 95%.
-    *   *Optimization:* Implements an LRU cache (up to 500 entries) to prevent duplicate network requests.
-*   **`content.css`:** Styles the green/red floating indicator badges.
+### Step 1: Create the ZIP Archive
+Select the following files and compress them into a `.zip` archive (e.g., `png-filter.zip`):
+- `manifest.json`
+- `background.js`
+- `content.js`
+- `content.css`
+- `icons/`
+- `assets/`
 
----
+### Step 2: Upload to Developer Console
+1. Go to the [Chrome Web Store Developer Console](https://chrome.google.com/webstore/devconsole).
+2. Sign in with a verified developer account.
+3. Click **New Item** and upload your ZIP file.
 
-## 🚀 Chrome Web Store Submission & Approval Guide
-
-Google reviews extensions closely, particularly those utilizing host permissions. Follow these steps to ensure a smooth, rapid approval process.
-
-### Step 1: Zip the Extension Files
-Compress the following files and folders into a `.zip` archive (do not include git files or helper scripts):
-*   `manifest.json`
-*   `background.js`
-*   `content.js`
-*   `content.css`
-*   `icons/`
-
-### Step 2: Prepare Store Listing Assets
-*   **Store Icon:** You can use the generated `icons/icon128.png` (128x128).
-*   **Screenshots:** Create at least 1 screenshot showing the Google Images grid with the Green/Red badges. Dimensions must be `1280x800` or `640x400`.
-*   **Promotional Tiles (Optional):** Small tile (440x280), Large tile (920x680), Marquee (1400x560).
-
-### Step 3: Fill Out the Developer Console Fields
-
-#### 1. Title & Metadata
-*   **Name:** Transparent PNG Checker
-*   **Summary (Max 150 chars):** Instantly check if PNG images in Google Search are actually transparent or just fake checkerboards, directly in the search grid.
-*   **Detailed Description (Copy & Paste):**
-    ```text
-    Tired of downloading "transparent" PNG images from search results only to discover they have a fake, baked-in gray and white checkerboard background? 
-
-    Transparent PNG Checker solves this daily developer and designer headache! It automatically scans images in the Google Image search grid and verifies if they have true alpha-transparency before you click or download.
-
-    Features:
-    - Real-time Grid Scanning: Checks PNG files as you scroll search results.
-    - Floating Indicators: Shows a green "Real PNG" badge for true transparent backgrounds and a red "Fake PNG" badge for solid ones.
-    - Zero Lag / Low RAM: Processes images in a background service worker using Offscreen Canvas optimization to keep your browser fast.
-    - Minimalist Design: Non-intrusive badges that fit right into Google's native interface.
-
-    Save time and avoid downloading fake assets. Perfect for web developers, UI/UX designers, and content creators.
-    ```
-
-#### 2. Single-Purpose Description (CRITICAL for Chrome Approval)
-Google requires extensions to have a single, narrow purpose.
-*   **Single-Purpose Statement:** "The sole purpose of this extension is to analyze PNG images in Google Image Search results and visually label their transparency status."
-
-#### 3. Permission Justifications (CRITICAL for Chrome Approval)
-Since the extension requests `<all_urls>` host permissions, you must justify it in the console:
-*   **Permission:** `<all_urls>`
-*   **Justification:** "The extension requires host permission to fetch the original PNG image source files from various web domains. The background worker fetches the image blob to inspect its alpha channel pixels on an Offscreen Canvas, verifying whether the image has true transparency or a fake solid background. Since Google Images links to files hosted across the entire web, the extension needs to be able to fetch from any external URL."
+### Step 3: Complete Disclosures (Crucial for Rapid Approval)
+* **Single-Purpose Statement:** `"The sole purpose of this extension is to analyze PNG images in Google Image Search results and visually label their transparency status."`
+* **Permission Justification for `<all_urls>`:** `"The extension requires host permission to fetch original PNG image source files from various web domains. The background worker fetches the image blob to inspect its alpha channel pixels on an Offscreen Canvas, verifying whether the image has true transparency or a fake solid background. Since Google Images links to files hosted across the entire web, the extension needs to be able to fetch from any external URL."`
 
 ---
 
 ## 🔒 Privacy & Safety
-*   This extension is completely privacy-focused. It runs entirely locally in your browser.
-*   No personal data, search queries, or browsing history is tracked, collected, or transmitted.
+
+- **Local Execution:** All calculations run locally in your browser context using `OffscreenCanvas`.
+- **Zero Tracking:** No search queries, browsing history, or identifiers are logged or sent to any server.
+- **No External Dependencies:** Standard vanilla APIs ensure there is no hidden tracking code.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
