@@ -1,6 +1,6 @@
 // Cache validation results (URL -> transparency status)
 const resultCache = new Map();
-const MAX_CACHE_SIZE = 500;
+const MAX_CACHE_SIZE = 50;
 
 function addToCache(url, isTransparent) {
   if (resultCache.size >= MAX_CACHE_SIZE) {
