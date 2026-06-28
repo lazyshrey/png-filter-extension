@@ -34,7 +34,7 @@
     <tr>
       <td width="300" valign="top" style="border: 1px solid #333; border-radius: 15px; background: rgba(255,255,255,0.02); padding: 15px;">
         <h3>⚡ Instant Scan</h3>
-        <p>Automatically scans the Google Images results grid in one go as the page loads and content appears. No hovering required.</p>
+        <p>Automatically scans the Google Images results grid in one go as the page loads and content appears.</p>
       </td>
       <td width="300" valign="top" style="border: 1px solid #333; border-radius: 15px; background: rgba(255,255,255,0.02); padding: 15px;">
         <h3>🏷️ Smart Badges</h3>
@@ -48,7 +48,7 @@
       </td>
       <td width="300" valign="top" style="border: 1px solid #333; border-radius: 15px; background: rgba(255,255,255,0.02); padding: 15px;">
         <h3>💾 Memory Caching</h3>
-        <p>An in-memory LRU cache stores up to 500 validated URLs so you never fetch the same image twice.</p>
+        <p>An in-memory LRU cache stores up to 50 validated URLs so you never fetch the same image twice.</p>
       </td>
     </tr>
   </table>
